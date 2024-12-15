@@ -9,11 +9,13 @@ def _start_guess_number_1_to_100(nr, _loginfoQueue):
     """
     This is a toy example of a long running task which can be executed in parallel.
     """
+    trials = 0
     try:
         _loginfoQueue.put((logger.console, f"Start guess number {nr}",))
         while True:
             gues = random.randint(1,100)
             _loginfoQueue.put(lambda: BuiltIn().set_global_variable("${LAST_GUESSED_NUMBER}", gues))
+            trials += 1
             if gues == nr:
                 break
             _loginfoQueue.put((logger.console, f"Guess {gues} is wrong, should be {nr}",))
@@ -24,6 +26,7 @@ def _start_guess_number_1_to_100(nr, _loginfoQueue):
     finally:
         _loginfoQueue.put((logger.console, f"End guess number {nr}",))
         _loginfoQueue.put("End")
+    return trials
 
 
 class parallel_execution_keyword(object):
@@ -43,7 +46,7 @@ class parallel_execution_keyword(object):
                     if all(future.done() for future in self._futures):
                         logger.console("All tasks completed")
                         logger.info("All tasks completed")
-                        break
+                        return [future.result() for future in self._futures]
                 case (logTarget, logMessage,):
                     # This is the most usefull and least dangerous use case
                     logTarget(logMessage)
