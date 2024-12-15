@@ -45,8 +45,10 @@ class parallel_execution_keyword(object):
                         logger.info("All tasks completed")
                         break
                 case (logTarget, logMessage,):
+                    # This is the most usefull and least dangerous use case
                     logTarget(logMessage)
                 case toRunInMainThread:
+                    # This is a bad idea, way to powerfull and dangerous, just to present the idea
                     toRunInMainThread()              
             
 
