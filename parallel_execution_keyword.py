@@ -25,7 +25,6 @@ def _start_guess_number_1_to_100(nr, _loginfoQueue):
         _loginfoQueue.put((logger.console, f"Guessing terminated with exception {e} of type {type(e)}",))
     finally:
         _loginfoQueue.put((logger.console, f"End guess number {nr}",))
-        _loginfoQueue.put("End")
     return trials
 
 
@@ -36,7 +35,9 @@ class parallel_execution_keyword(object):
         self._futures = []
 
     def start_guess_number_1_to_100_parallel(self, nr: int):
-        self._futures.append(self._executor.submit(_start_guess_number_1_to_100, nr, self._loginfoQueue))
+        future = self._executor.submit(_start_guess_number_1_to_100, nr, self._loginfoQueue)
+        future.add_done_callback(lambda _: self._loginfoQueue.put("End"))
+        self._futures.append(future)
 
     def wait_for_completion_of_parallel_tasks(self):
         while True:
