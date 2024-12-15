@@ -36,8 +36,8 @@ class parallel_execution_keyword(object):
 
     def start_guess_number_1_to_100_parallel(self, nr: int):
         future = self._executor.submit(_start_guess_number_1_to_100, nr, self._loginfoQueue)
-        future.add_done_callback(lambda _: self._loginfoQueue.put("End"))
         self._futures.append(future)
+        future.add_done_callback(lambda _: self._loginfoQueue.put("End"))
 
     def wait_for_completion_of_parallel_tasks(self):
         while True:
