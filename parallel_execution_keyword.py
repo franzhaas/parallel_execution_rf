@@ -52,7 +52,7 @@ class parallel_execution_keyword(object):
                     # This is the most usefull and least dangerous use case
                     logTarget(logMessage)
                 case toRunInMainThread:
-                    # This is a bad idea, way to powerfull and dangerous, just to present the idea
+                    # This is a spiderman thing great power, great responsibility
                     toRunInMainThread()              
             
 
